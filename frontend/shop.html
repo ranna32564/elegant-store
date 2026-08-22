@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop All — ELEGANT</title>
+<meta name="description" content="Filter the full ELEGANT collection by category, price and rating. Accessories, fashion and gadgets.">
+<meta property="og:title" content="Shop All — ELEGANT">
+<meta property="og:description" content="Filter the full ELEGANT collection by category, price and rating. Accessories, fashion and gadgets.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="shop">
+<div class="page-loader"><div style="text-align:center"><div class="page-loader__mark">Elegant</div><div class="page-loader__bar"><i></i></div></div></div>
+
+<header class="site-header" data-chrome="header"></header>
+
+<main>
+
+  <section class="page-head wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Shop</p>
+    <h1 id="shopHeading">The Collection</h1>
+    <p>Eighteen considered pieces across accessories, fashion and gadgets — filter by category, price or rating.</p>
+  </section>
+
+  <section class="section--tight wrap">
+    <div class="shop-layout">
+      <!-- filter rail -->
+      <aside class="filters" id="filters" aria-label="Filters">
+        <form id="filterForm">
+          <h3>Category</h3>
+          <div class="filter-group">
+            <label class="radio-row"><input type="radio" name="category" value="all" checked> Everything <span class="count" data-count="all">–</span></label>
+            <label class="radio-row"><input type="radio" name="category" value="accessories"> Accessories <span class="count" data-count="accessories">–</span></label>
+            <label class="radio-row"><input type="radio" name="category" value="fashion"> Fashion <span class="count" data-count="fashion">–</span></label>
+            <label class="radio-row"><input type="radio" name="category" value="gadgets"> Gadgets <span class="count" data-count="gadgets">–</span></label>
+          </div>
+          <div class="filter-group">
+            <h3>Max price</h3>
+            <input type="range" name="max" min="2000" max="20000" step="500" value="20000" aria-label="Maximum price">
+            <p class="hint">Up to <b id="maxOut">৳20,000</b></p>
+          </div>
+        </form>
+      </aside>
+
+      <div>
+        <div class="shop-bar">
+          <form id="searchForm" role="search" style="display:flex;gap:8px;flex:1;min-width:220px;max-width:360px">
+            <input id="shopSearch" type="search" placeholder="Search the collection…" aria-label="Search the collection">
+            <button class="btn btn--primary btn--sm" type="submit">Search</button>
+          </form>
+          <button class="btn btn--ghost btn--sm filter-toggle" id="filterToggle" type="button">Filters</button>
+          <span class="result-count" id="resultCount">Loading…</span>
+          <label class="sr-only" for="sortSelect">Sort products</label>
+          <select id="sortSelect">
+            <option value="featured">Sort: Featured</option>
+            <option value="newest">Newest first</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="rating">Highest rated</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+        <div class="prod-grid" id="shopGrid"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-chrome="footer"></footer>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

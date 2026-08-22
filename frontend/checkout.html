@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout — ELEGANT</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="css/style.css"></head>
+<body data-page="checkout"><div class="page-loader"><div style="text-align:center"><div class="page-loader__mark">Elegant</div><div class="page-loader__bar"><i></i></div></div></div>
+<header class="site-header" data-chrome="header"></header><main>
+<section class="page-head wrap"><p class="crumbs"><a href="cart.html">Bag</a> / Checkout</p><h1>Delivery &amp; Payment</h1><div class="steps"><span>1 · Bag</span><span class="sep"></span><b>2 · Delivery</b><span class="sep"></span><span>3 · Payment</span></div></section>
+<section class="section--tight wrap" id="checkoutBody"><div class="checkout-layout"><form class="form-card" id="checkoutForm" novalidate>
+<p class="eyebrow">Shipping details</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<label class="field"><span>Full name</span><input type="text" name="name" required><em class="err" data-err="name"></em></label>
+<label class="field"><span>Email</span><input type="email" name="email" readonly required><em class="err" data-err="email"></em></label>
+<label class="field"><span>Phone</span><input type="tel" name="phone" required><em class="err" data-err="phone"></em></label>
+<label class="field"><span>City</span><input type="text" name="city" value="Dhaka" required><em class="err" data-err="city"></em></label></div>
+<label class="field"><span>Street address</span><input type="text" name="line1" required><em class="err" data-err="line1"></em></label>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><label class="field"><span>Postcode</span><input type="text" name="postcode"></label><label class="field"><span>Country</span><input type="text" value="Bangladesh" disabled></label></div>
+<label class="field"><span>Delivery notes (optional)</span><textarea name="notes"></textarea></label>
+<p class="eyebrow" style="margin-top:28px">Payment method</p>
+<div class="pay-methods"><label class="pay-option"><input type="radio" name="paymentMethod" value="bkash" checked><span><b>bKash</b><small>Send the exact total manually and enter the transaction ID.</small></span></label><label class="pay-option"><input type="radio" name="paymentMethod" value="cod"><span><b>Cash on delivery</b><small>Pay the courier when your parcel arrives.</small></span></label></div>
+<div id="bkashBox" class="form-card" style="margin-top:16px;background:#faf8f5"><p style="margin:0 0 8px"><b>Send payment to bKash</b></p><p style="margin:0 0 8px">Number: <strong id="bkashNumber">Loading…</strong> <button type="button" class="btn btn--ghost btn--sm" id="copyBkash">Copy</button></p><p style="margin:0 0 12px">Total amount: <strong id="bkashAmount">৳0</strong></p><p class="hint">After sending the exact amount, enter the bKash Transaction ID below. Your order will stay <b>Pending</b> until the admin verifies the transaction.</p><label class="field" style="margin-top:12px"><span>bKash Transaction ID</span><input type="text" name="transactionId" placeholder="e.g. 8A7B6C5D9E"><em class="err" data-err="transactionId"></em></label></div>
+<p class="hint" id="payNote" style="margin-top:14px"></p><button class="btn btn--primary btn--block" id="placeOrder" type="submit" style="margin-top:22px">Place Order</button>
+</form><aside class="summary" id="checkoutSummary"><h3>Order Summary</h3><div data-lines></div><div class="summary-row"><span>Subtotal</span><span data-sub>৳0</span></div><div class="summary-row"><span>Delivery</span><span data-ship>Free</span></div><div class="summary-row summary-row--total"><span>Total</span><span data-total>৳0</span></div></aside></div></section></main>
+<footer class="site-footer" data-chrome="footer"></footer><script src="js/api.js"></script><script src="js/cart.js"></script><script src="js/auth.js"></script><script src="js/main.js"></script></body></html>

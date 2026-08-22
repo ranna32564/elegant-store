@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sandbox Gateway — ELEGANT</title>
+<meta name="description" content="Built-in sandbox payment gateway used when SSLCommerz/bKash credentials are placeholders.">
+<meta property="og:title" content="Sandbox Gateway — ELEGANT">
+<meta property="og:description" content="Built-in sandbox payment gateway used when SSLCommerz/bKash credentials are placeholders.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="mock">
+<div class="page-loader"><div style="text-align:center"><div class="page-loader__mark">Elegant</div><div class="page-loader__bar"><i></i></div></div></div>
+
+<header class="site-header" data-chrome="header"></header>
+
+<main>
+
+  <section class="section wrap">
+    <div class="form-card mock-card">
+      <p class="gw-logo" id="mockGateway">SSLCommerz Sandbox</p>
+      <h1 class="serif" style="font-size:1.9rem;margin-top:14px">Authorise payment</h1>
+      <p class="muted" style="margin-top:10px">This is the bundled mock gateway. No credentials are required and no money moves.</p>
+      <div class="summary-row" style="margin-top:26px"><span>Order</span><span id="mockOrder">—</span></div>
+      <div class="summary-row summary-row--total"><span>Amount</span><span id="mockAmount">৳0</span></div>
+      <div style="display:grid;gap:10px;margin-top:26px">
+        <button class="btn btn--primary btn--block" id="mockPay" type="button">Pay now</button>
+        <button class="btn btn--ghost btn--block" id="mockFail" type="button">Simulate failure</button>
+        <button class="btn btn--ghost btn--block" id="mockCancel" type="button">Cancel payment</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-chrome="footer"></footer>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

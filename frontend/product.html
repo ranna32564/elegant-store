@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product — ELEGANT</title>
+<meta name="description" content="Product detail, specifications and verified client reviews at ELEGANT.">
+<meta property="og:title" content="Product — ELEGANT">
+<meta property="og:description" content="Product detail, specifications and verified client reviews at ELEGANT.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="product">
+<div class="page-loader"><div style="text-align:center"><div class="page-loader__mark">Elegant</div><div class="page-loader__bar"><i></i></div></div></div>
+
+<header class="site-header" data-chrome="header"></header>
+
+<main>
+
+  <section class="page-head wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / <a href="shop.html">Shop</a> / Product</p>
+  </section>
+
+  <section class="section--tight wrap">
+    <div class="pdp" id="pdp">
+      <div><div class="skel skel-img" style="aspect-ratio:1/1;border-radius:18px"></div></div>
+      <div style="display:grid;gap:12px">
+        <div class="skel skel-line" style="width:30%"></div>
+        <div class="skel skel-line" style="width:70%;height:28px"></div>
+        <div class="skel skel-line" style="width:40%"></div>
+        <div class="skel skel-line" style="width:100%;height:80px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- reviews -->
+  <section class="section--tight wrap">
+    <div class="sec-head sec-head--row">
+      <div><p class="eyebrow">Client Notes</p><h2>Reviews</h2><p id="reviewCount" class="muted"></p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:32px;align-items:start" class="pdp">
+      <div class="review-list" id="reviewList"></div>
+      <form class="form-card" id="reviewForm">
+        <p class="eyebrow">Write a review</p>
+        <div class="star-picker" id="starPicker" role="group" aria-label="Your rating"></div>
+        <input type="hidden" name="rating" value="5">
+        <label class="field"><span>Your name</span><input type="text" name="name" required><em class="err" data-err="name"></em></label>
+        <label class="field"><span>Your review</span><textarea name="comment" placeholder="What did you think?" required></textarea><em class="err" data-err="comment"></em></label>
+        <button class="btn btn--primary btn--block" type="submit">Publish review</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- related -->
+  <section class="section--tight wrap" id="relatedSection">
+    <div class="sec-head sec-head--row"><div><p class="eyebrow">You may also like</p><h2>More from this edit</h2></div></div>
+    <div class="prod-grid" id="related"></div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-chrome="footer"></footer>
+
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+
+<!-- Buy Now Logic Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // MutationObserver দিয়ে ডায়নামিকালি আসা Buy Now বাটনটি ট্র্যাক করা
+    const observer = new MutationObserver(() => {
+      const buyNowBtn = document.querySelector('#pdp .btn-buy-now') || document.getElementById('buyNowBtn');
+      
+      if (buyNowBtn && !buyNowBtn.dataset.initialized) {
+        buyNowBtn.dataset.initialized = "true"; // বারবার ইভেন্ট লিসেনার লাগা রদ করতে
+
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        // ১. লগইন স্টেট চেক
+        if (!token || !user.email) {
+          buyNowBtn.innerText = 'LOGIN TO BUY';
+          buyNowBtn.style.opacity = '0.7';
+        } else {
+          buyNowBtn.innerText = 'BUY NOW';
+          buyNowBtn.style.opacity = '1';
+        }
+
+        // ২. বাটন ক্লিক হ্যান্ডলার
+        buyNowBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const currentToken = localStorage.getItem('token');
+          const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+
+          // লগইন না থাকলে সরাসরি লগইন পেজে নিয়ে যাবে
+          if (!currentToken || !currentUser.email) {
+            alert('Please login to purchase this product.');
+            window.location.href = 'login.html?redirect=checkout.html';
+            return;
+          }
+
+          // লগইন থাকলে অটোমেটিক ইমেইল এবং তথ্য নিয়ে চেকআউটে যাবে
+          const checkoutData = {
+            userEmail: currentUser.email,
+            userName: currentUser.name || 'Customer',
+            timestamp: Date.now()
+          };
+
+          localStorage.setItem('checkout_user_data', JSON.stringify(checkoutData));
+          window.location.href = 'checkout.html';
+        });
+      }
+    });
+
+    const pdpContainer = document.getElementById('pdp');
+    if (pdpContainer) {
+      observer.observe(pdpContainer, { childList: true, subtree: true });
+    }
+  });
+</script>
+
+</body>
+</html>

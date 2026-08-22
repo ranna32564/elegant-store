@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Account — ELEGANT</title>
+<meta name="description" content="Create an ELEGANT account for faster checkout, order tracking and a synced wishlist.">
+<meta property="og:title" content="Create Account — ELEGANT">
+<meta property="og:description" content="Create an ELEGANT account for faster checkout, order tracking and a synced wishlist.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="signup">
+<div class="page-loader"><div style="text-align:center"><div class="page-loader__mark">Elegant</div><div class="page-loader__bar"><i></i></div></div></div>
+
+<header class="site-header" data-chrome="header"></header>
+
+<main>
+
+  <section class="section wrap">
+    <div class="auth-wrap">
+      <div class="form-card">
+        <p class="eyebrow">Join ELEGANT</p>
+        <h1 class="serif" style="font-size:2rem">Create your account</h1>
+        <p class="muted" style="margin:10px 0 26px">Ten percent off your first order, plus early access to every drop.</p>
+        <form id="signupForm" novalidate>
+          <label class="field"><span>Full name</span><input type="text" name="name" autocomplete="name" required><em class="err" data-err="name"></em></label>
+          <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" required><em class="err" data-err="email"></em></label>
+          <label class="field"><span>Password</span><input type="password" name="password" autocomplete="new-password" required><em class="err" data-err="password"></em></label>
+          <label class="field"><span>Confirm password</span><input type="password" name="confirm" autocomplete="new-password" required><em class="err" data-err="confirm"></em></label>
+          <div id="otpBox" hidden><label class="field"><span>Email verification code</span><input type="text" name="otp" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="6-digit code"><em class="err" data-err="otp"></em></label></div>
+          <button class="btn btn--primary btn--block" type="submit" id="signupSubmit">Send Verification Code</button>
+        </form>
+        <p class="hint" style="margin-top:20px">Already have an account? <a href="login.html" style="color:var(--rose)">Sign in</a></p>
+      </div>
+      <div class="auth-aside">
+        <img src="images/hero.png" alt="ELEGANT editorial still life" onerror="this.onerror=null;this.style.opacity=0.001">
+        <p class="auth-aside__quote">“Considered, never excessive.”</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-chrome="footer"></footer>
+<script src="js/api.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
