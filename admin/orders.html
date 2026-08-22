@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Orders — ELEGANT Admin</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="orders">
+<div class="admin">
+  <aside data-rail class="rail"></aside>
+  <div class="work">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="burger" data-burger type="button" aria-label="Open navigation"></button>
+        <div><p class="eyebrow">Sales</p><h1>Orders</h1><p>Update fulfilment and payment status. Customers see the change on their account page instantly.</p></div>
+      </div>
+      <div class="topbar__actions"><a class="btn btn--ghost btn--sm" href="dashboard.html">Dashboard</a></div>
+    </div>
+    <section class="card">
+      <div class="card__head">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <label class="sr-only" for="statusFilter">Filter by status</label>
+          <select class="mini" id="statusFilter">
+            <option value="all">All statuses</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <span class="muted" id="orderCount" style="font-size:.78rem">—</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Payment / Transaction</th><th>Fulfilment</th><th class="num">Total</th></tr></thead>
+          <tbody id="orderBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+<div class="toasts"></div>
+<script>window.ASSET_PREFIX = '../';</script>
+<script src="../js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

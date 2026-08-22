@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Dashboard — ELEGANT Admin</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+/* ===== 3-Dot Menu Styles ===== */
+.menu-wrap {
+  position: relative;
+  display: inline-block;
+}
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #6f6660;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+.menu-btn:hover {
+  background: #f3eeea;
+}
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  background: #fff;
+  border: 1px solid #efe4dc;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  min-width: 140px;
+  display: none;
+  overflow: hidden;
+  z-index: 100;
+}
+.menu-dropdown.open {
+  display: block;
+}
+.menu-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  color: #a83c46;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.menu-dropdown button:hover {
+  background: #f8e8e9;
+}
+.orders-table td:last-child {
+  text-align: center;
+}
+</style>
+</head>
+<body data-page="dashboard">
+<div class="admin">
+  <aside data-rail class="rail"></aside>
+  <div class="work">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="burger" data-burger type="button" aria-label="Open navigation"></button>
+        <div><p class="eyebrow">Overview</p><h1>Dashboard</h1><p>Revenue, stock health and the latest orders at a glance.</p></div>
+      </div>
+      <div class="topbar__actions"><span class="mode-note" id="modeNote">Datastore: —</span><a class="btn btn--ghost btn--sm" href="products.html">Manage products</a><a class="btn btn--primary btn--sm" href="orders.html">Open orders</a></div>
+    </div>
+    <div class="stat-grid" id="statGrid"></div>
+
+    <div class="two-col" style="margin-bottom:20px">
+      <section class="card">
+        <div class="card__head"><div><p class="eyebrow">Last 7 days</p><h2>Revenue</h2></div></div>
+        <div class="card__body"><div class="chart" id="revChart"></div></div>
+      </section>
+      <section class="card">
+        <div class="card__head"><div><p class="eyebrow">Restock soon</p><h2>Low stock</h2></div></div>
+        <div class="card__body" id="lowStock"></div>
+      </section>
+    </div>
+
+    <div class="two-col">
+      <section class="card">
+        <div class="card__head">
+          <div><p class="eyebrow">Recent activity</p><h2>Latest orders</h2></div>
+          <a class="btn btn--ghost btn--sm" href="orders.html">View all</a>
+        </div>
+        <div class="card__body" style="padding:0;">
+          <div class="table-wrap">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th style="text-align:center;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentOrders">
+                <!-- JavaScript দিয়ে ডেটা আসবে -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <section class="card">
+        <div class="card__head"><div><p class="eyebrow">Performance</p><h2>Top sellers</h2></div></div>
+        <div class="card__body" id="topProducts"></div>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="toasts"></div>
+
+<script>
+// ============================================================
+// ডেটা localStorage-এ সেভ করা হবে (রিফ্রেশ করলেও থাকবে)
+// ============================================================
+
+const STORAGE_KEY = 'elegant_orders_data';
+
+// ===== ডিফল্ট অর্ডার ডেটা =====
+const DEFAULT_ORDERS = [
+  { id: 'ELG-1R37S9A0P', customer: 'Khayrul Islam', date: '20 Aug 2026', payment: 'bkash paid', status: 'processing', total: '৳5,600' },
+  { id: 'ELG-0B2X9XADN', customer: 'Larry Frank', date: '19 Aug 2026', payment: 'sslcommerz paid', status: 'processing', total: '৳54,100' },
+  { id: 'ELG-0A8BD4RC4', customer: 'Larry Frank', date: '19 Aug 2026', payment: 'bkash paid', status: 'processing', total: '৳33,000' },
+  { id: 'ELG-08NQMVS2M', customer: 'Larry Frank', date: '19 Aug 2026', payment: 'bkash cancelled', status: 'cancelled', total: '৳9,800' },
+  { id: 'ELG-08KDAVX3L', customer: 'Larry Frank', date: '19 Aug 2026', payment: 'bkash cancelled', status: 'cancelled', total: '৳17,800' }
+];
+
+// ===== ডেটা লোড (localStorage থেকে, না থাকলে ডিফল্ট) =====
+function getOrders() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    } catch (e) {}
+  }
+  // প্রথমবার localStorage-এ ডিফল্ট ডেটা সেভ করুন
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_ORDERS));
+  return DEFAULT_ORDERS;
+}
+
+// ===== ডেটা সেভ (localStorage-এ) =====
+function saveOrders(orders) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+}
+
+// ===== অর্ডার অ্যারে (localStorage থেকে লোড) =====
+let ordersData = getOrders();
+
+// ===== টেবিল রেন্ডার ফাংশন =====
+function renderOrders() {
+  const tbody = document.getElementById('recentOrders');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  
+  ordersData.forEach((order, index) => {
+    let statusClass = 'pill--grey';
+    if (order.status === 'processing') statusClass = 'pill--amber';
+    else if (order.status === 'completed') statusClass = 'pill--green';
+    else if (order.status === 'cancelled') statusClass = 'pill--red';
+    else if (order.status === 'shipped') statusClass = 'pill--rose';
+    
+    let paymentClass = 'pill--grey';
+    if (order.payment === 'bkash paid') paymentClass = 'pill--rose';
+    else if (order.payment === 'sslcommerz paid') paymentClass = 'pill--green';
+    
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong style="font-weight:500;">${order.id}</strong></td>
+      <td>${order.customer}</td>
+      <td>${order.date}</td>
+      <td><span class="pill ${paymentClass}">${order.payment}</span></td>
+      <td><span class="pill ${statusClass}">${order.status}</span></td>
+      <td><strong>${order.total}</strong></td>
+      <td>
+        <div class="menu-wrap">
+          <button class="menu-btn" onclick="toggleMenu(event, ${index})" type="button">⋮</button>
+          <div class="menu-dropdown" id="menu-${index}">
+            <button onclick="deleteOrder('${order.id}')">🗑️ Delete</button>
+          </div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ===== ৩ ডট মেনু টগল =====
+function toggleMenu(event, index) {
+  event.stopPropagation();
+  const dropdown = document.getElementById(`menu-${index}`);
+  const isOpen = dropdown.classList.contains('open');
+  
+  document.querySelectorAll('.menu-dropdown').forEach(m => m.classList.remove('open'));
+  
+  if (!isOpen) {
+    dropdown.classList.add('open');
+  }
+}
+
+// ===== বাইরে ক্লিক করলে মেনু বন্ধ =====
+document.addEventListener('click', function() {
+  document.querySelectorAll('.menu-dropdown').forEach(m => m.classList.remove('open'));
+});
+
+// ===== Delete ফাংশন (localStorage-ও আপডেট করবে) =====
+function deleteOrder(orderId) {
+  if (!confirm(`Are you sure you want to delete order ${orderId}?`)) return;
+  
+  const index = ordersData.findIndex(o => o.id === orderId);
+  if (index === -1) return;
+  
+  // অ্যারে থেকে মুছুন
+  ordersData.splice(index, 1);
+  
+  // localStorage-এ সেভ করুন (যাতে রিফ্রেশ করলেও মুছে থাকে)
+  saveOrders(ordersData);
+  
+  // টেবিল রি-রেন্ডার করুন
+  renderOrders();
+  
+  alert(`✅ Order ${orderId} deleted successfully!`);
+}
+
+// ============================================================
+// STATS, CHART, LOW STOCK, TOP SELLERS (স্ট্যাটিক ডেমো)
+// ============================================================
+
+function renderStats() {
+  const host = document.getElementById('statGrid');
+  if (!host) return;
+  host.innerHTML = `
+    <div class="stat stat--dark"><small>Revenue (paid)</small><b>৳1,20,100</b><span class="delta" style="color:rgba(248,239,235,.7)">Avg order ৳24,020</span></div>
+    <div class="stat"><small>Orders</small><b>${ordersData.length}</b><span class="delta">${ordersData.filter(o => o.status === 'processing').length} awaiting action</span></div>
+    <div class="stat"><small>Products live</small><b>12</b><span class="delta">2 low on stock</span></div>
+    <div class="stat"><small>Customers</small><b>8</b><span class="delta">5 newsletter subs</span></div>
+  `;
+}
+
+function renderChart() {
+  const host = document.getElementById('revChart');
+  if (!host) return;
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  host.innerHTML = days.map(day => `
+    <div class="chart__col">
+      <span class="chart__val">৳0</span>
+      <span class="chart__bar" style="height:4px"></span>
+      <small>${day}</small>
+    </div>
+  `).join('');
+}
+
+function renderLowStock() {
+  const host = document.getElementById('lowStock');
+  if (!host) return;
+  host.innerHTML = `
+    <div class="summary-row" style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #f6efe9">
+      <span><b style="font-weight:500">Gold Chain</b><br><small class="muted">accessories</small></span>
+      <span class="pill pill--amber">2 left</span>
+    </div>
+    <div class="summary-row" style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #f6efe9">
+      <span><b style="font-weight:500">Silk Scarf</b><br><small class="muted">fashion</small></span>
+      <span class="pill pill--red">0 left</span>
+    </div>
+  `;
+}
+
+function renderTopSellers() {
+  const host = document.getElementById('topProducts');
+  if (!host) return;
+  host.innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Product</th><th class="num">Units</th><th class="num">Revenue</th></tr></thead>
+        <tbody>
+          <tr><td>Gold Chain</td><td class="num">3</td><td class="num">৳16,800</td></tr>
+          <tr><td>Silk Scarf</td><td class="num">2</td><td class="num">৳5,600</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+// ============================================================
+// RAIL (সাইডবার) তৈরি
+// ============================================================
+
+function renderRail() {
+  const host = document.querySelector('[data-rail]');
+  if (!host) return;
+  host.className = 'rail';
+  host.innerHTML = `
+    <div class="rail__brand">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M7 6.5h10M7 12h7.5M7 17.5h10"/>
+        </svg>
+      </span>
+      <span><b>Elegant</b><small>Admin console</small></span>
+    </div>
+    <nav class="rail__nav">
+      <p class="rail__label">Overview</p>
+      <a href="dashboard.html" class="active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <p class="rail__label">Catalogue</p>
+      <a href="products.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 8h14l1 12H4L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span>Products</span>
+      </a>
+      <a href="upload.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V5m0 0L8 9m4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        <span>Media library</span>
+      </a>
+      <p class="rail__label">Sales</p>
+      <a href="orders.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h6"/></svg>
+        <span>Orders</span>
+      </a>
+      <p class="rail__label">Storefront</p>
+      <a href="../index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10h16v10H4z"/><path d="M4 10l2-5h12l2 5"/><path d="M9 20v-5h6v5"/></svg>
+        <span>View shop</span>
+      </a>
+    </nav>
+    <div class="rail__foot">
+      <div class="rail__who">
+        <span class="av">AD</span>
+        <span><b>Administrator</b><br><small>admin@elegant.com</small></span>
+      </div>
+      <button class="rail__logout" type="button" onclick="alert('Signed out!')">Sign out</button>
+    </div>
+  `;
+}
+
+// ============================================================
+// পেজ লোড হলে সব রেন্ডার করুন
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderRail();
+  renderStats();
+  renderChart();
+  renderLowStock();
+  renderTopSellers();
+  renderOrders();
+  
+  const note = document.getElementById('modeNote');
+  if (note) note.textContent = 'Datastore: Static Demo (localStorage)';
+});
+</script>
+
+<script src="../js/api.js"></script>
+</body>
+</html>

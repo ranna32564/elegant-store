@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin Sign In — ELEGANT</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="login" class="login-page">
+  <main class="login-card">
+    <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M7 6.5h10M7 12h7.5M7 17.5h10"/></svg></span>
+    <p class="eyebrow">Elegant — Admin</p>
+    <h1>Console sign in</h1>
+    <p>Manage the catalogue, media library and orders. Administrator accounts only.</p>
+    <form id="adminLogin" novalidate>
+      <label class="field"><span>Email</span><input type="email" name="email" autocomplete="username" required></label>
+      <label class="field"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
+      <em class="err" data-err="form"></em>
+      <button class="btn btn-primary btn-block" type="submit" style="margin-top:6px">Sign in</button>
+    </form>
+    <a class="back-link" href="../index.html">&larr; Back to the storefront</a>
+  </main>
+  <div class="toasts"></div>
+  <script>window.ASSET_PREFIX = '../';</script>
+  <script src="../js/api.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Products — ELEGANT Admin</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body data-page="products">
+<div class="admin">
+  <aside data-rail class="rail"></aside>
+  <div class="work">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="burger" data-burger type="button" aria-label="Open navigation"></button>
+        <div><p class="eyebrow">Catalogue</p><h1>Products</h1><p>Create, edit, restock and remove pieces. Changes are live on the storefront immediately.</p></div>
+      </div>
+      <div class="topbar__actions"><a class="btn btn--ghost btn--sm" href="upload.html">Media library</a><button class="btn btn--primary btn--sm" id="newProduct" type="button">+ New product</button></div>
+    </div>
+    <section class="card">
+      <div class="card__head">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <label class="sr-only" for="prodSearch">Search products</label>
+          <input class="mini" id="prodSearch" type="search" placeholder="Search products…" style="min-width:200px">
+          <label class="sr-only" for="prodCat">Filter by category</label>
+          <select class="mini" id="prodCat">
+            <option value="all">All categories</option>
+            <option value="accessories">Accessories</option>
+            <option value="fashion">Fashion</option>
+            <option value="gadgets">Gadgets</option>
+          </select>
+        </div>
+        <span class="muted" id="prodCount" style="font-size:.78rem">—</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Product</th><th class="num">Price</th><th>Stock</th><th>Rating</th><th>Flags</th><th>Added</th><th class="num">Actions</th></tr></thead>
+          <tbody id="prodBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- create / edit modal -->
+    <div class="modal" id="prodModal" role="dialog" aria-modal="true" aria-labelledby="prodModalTitle">
+      <div class="modal__panel">
+        <div class="modal__head">
+          <div><p class="eyebrow">Catalogue</p><h2 id="prodModalTitle">New product</h2></div>
+          <button class="modal__close" data-close type="button" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <div class="modal__body">
+          <form id="prodForm" novalidate>
+            <div class="grid-2">
+              <label class="field"><span>Name</span><input type="text" name="name" required><em class="err" data-err="name"></em></label>
+              <label class="field"><span>Category</span>
+                <select name="category">
+                  <option value="accessories">Accessories</option>
+                  <option value="fashion">Fashion</option>
+                  <option value="gadgets">Gadgets</option>
+                </select><em class="err" data-err="category"></em></label>
+            </div>
+            <div class="grid-3">
+              <label class="field"><span>Price (৳)</span><input type="number" name="price" min="0" step="1" required><em class="err" data-err="price"></em></label>
+              <label class="field"><span>Compare at (৳)</span><input type="number" name="oldPrice" min="0" step="1"></label>
+              <label class="field"><span>Stock</span><input type="number" name="stock" min="0" step="1"></label>
+            </div>
+            <div class="grid-2">
+              <label class="field"><span>Rating (0–5)</span><input type="number" name="rating" min="0" max="5" step="0.1"></label>
+              <label class="field"><span>Material / spec line</span><input type="text" name="material" placeholder="18k gold vermeil"></label>
+            </div>
+            <label class="field"><span>Description</span><textarea name="description" placeholder="Two or three editorial sentences…"></textarea></label>
+            <div class="grid-2">
+              <label class="field"><span>Image path</span><input type="text" name="image" placeholder="images/acc-1.png or /uploads/…"></label>
+              <label class="field"><span>Or upload a new image</span><input type="file" name="imageFile" accept="image/*"></label>
+            </div>
+            <img id="prodPreview" alt="Current product image" style="display:none;width:110px;height:120px;object-fit:cover;border-radius:10px;margin-bottom:14px" onerror="this.style.display='none'">
+            <label class="field"><span>Specs (JSON array of [label, value] pairs or objects)</span><input type="text" name="specs" placeholder='[{"label":"Material","value":"Silk"}]'></label>
+            <div class="checks">
+              <label><input type="checkbox" name="isNewArrival"> New arrival</label>
+              <label><input type="checkbox" name="isTrending"> Trending</label>
+              <label><input type="checkbox" name="isBestSeller"> Best seller</label>
+            </div>
+            <em class="err" data-err="form"></em>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+              <button class="btn btn--primary" type="submit">Save product</button>
+              <button class="btn btn--ghost" data-close type="button">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toasts"></div>
+<script>window.ASSET_PREFIX = '../';</script>
+<script src="../js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
